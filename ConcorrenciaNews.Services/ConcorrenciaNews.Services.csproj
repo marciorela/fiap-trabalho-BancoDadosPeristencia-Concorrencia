@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConcorrenciaNews.AppDbContext\ConcorrenciaNews.AppDbContext.csproj" />
+    <ProjectReference Include="..\ConcorrenciaNews.Data\ConcorrenciaNews.Data.csproj" />
+    <ProjectReference Include="..\ConcorrenciaNews.Helpers\ConcorrenciaNews.Helpers.csproj" />
+  </ItemGroup>
+
+</Project>

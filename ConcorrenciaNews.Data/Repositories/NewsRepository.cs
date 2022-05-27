@@ -28,40 +28,19 @@ namespace ConcorrenciaNews.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<News> GetNewsById(Guid id)
+        public async Task<News?> GetNewsById(Guid id)
         {
-            var result = _db.GetData<News>(id.ToString());
-            if (result == null)
-            {
-                result = await _ctx.News.FirstOrDefaultAsync(x => x.Id == id);
-                if (result != null)
-                {
-                    _db.SetData(id.ToString(), result, TimeSpan.FromMinutes(5));
-                }
-            }
-
-            return result;
+            return await _ctx.News.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public IEnumerable<NewsSummary> GetSummary()
+        public async Task<IEnumerable<NewsSummary>> GetSummary()
         {
 
-            var list = _db.GetData<List<NewsSummary>>("summary");
-            if (list == null)
-            {
-                list = _ctx.News
-                    .Select(n => new NewsSummary { Id = n.Id, Data = n.Data, Titulo = n.Titulo })
-                    .OrderByDescending(o => o.Data)
-                    .Take(20)
-                    .ToList();
-
-                if (list.Any())
-                {
-                    _db.SetData("summary", list, TimeSpan.FromSeconds(60));
-                }
-            }
-
-            return list;
+            return await _ctx.News
+                .Select(n => new NewsSummary { Id = n.Id, Data = n.Data, Titulo = n.Titulo })
+                .OrderByDescending(o => o.Data)
+                .Take(20)
+                .ToListAsync();
         }
     }
 }

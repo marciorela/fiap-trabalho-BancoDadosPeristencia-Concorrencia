@@ -1,7 +1,9 @@
-﻿using ConcorrenciaNews.Data.Repositories;
-using ConcorrenciaNews.Domain;
+﻿using ConcorrenciaNews.Domain;
 using ConcorrenciaNews.Domain.Entities;
 using ConcorrenciaNews.Domain.Model;
+using ConcorrenciaNews.Services.Commands;
+using ConcorrenciaNews.Services.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,17 +17,17 @@ namespace ConcorrenciaNews.Api.Controllers
     [Route("[Controller]")]
     public class NewsController : ControllerBase
     {
-        private readonly NewsRepository _newsRepository;
+        private readonly IMediator _mediator;
 
-        public NewsController(NewsRepository newsRepository)
+        public NewsController(IMediator mediator)
         {
-            _newsRepository = newsRepository;
+            _mediator = mediator;
         }
 
         [HttpGet("summary")]
-        public IEnumerable<NewsSummary> GetSummary()
+        public async Task<IEnumerable<NewsSummary>> GetSummary()
         {
-            var list = _newsRepository.GetSummary();
+            var list = await _mediator.Send(new GetSummaryQuery());
 
             return list;
         }
@@ -33,7 +35,7 @@ namespace ConcorrenciaNews.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNews(Guid id)
         {
-            var news = await _newsRepository.GetNewsById(id);
+            var news = await _mediator.Send(new GetNewsByIdQuery() { Id = id });
             if (news == null)
             {
                 return NotFound();
@@ -47,7 +49,12 @@ namespace ConcorrenciaNews.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(News news)
         {
-            await _newsRepository.Add(news);
+            await _mediator.Send(new CreateNewsCommand()
+            {
+                Data = news.Data,
+                Titulo = news.Titulo,
+                Corpo = news.Corpo
+            });
 
             return Created(news.Id.ToString(), news);
         }

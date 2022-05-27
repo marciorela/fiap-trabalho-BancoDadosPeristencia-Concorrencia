@@ -11,9 +11,9 @@ namespace ConcorrenciaNews.Contracts.Repositories
 {
     public interface INewsRepository
     {
-        IEnumerable<NewsSummary> GetSummary();
+        Task<IEnumerable<NewsSummary>> GetSummary();
 
-        Task<News> GetNewsById(Guid id);
+        Task<News?> GetNewsById(Guid id);
 
         Task Add(News news);
     }
