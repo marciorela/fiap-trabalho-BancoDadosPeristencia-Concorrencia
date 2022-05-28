@@ -18,11 +18,11 @@ namespace ConcorrenciaNews.Services.Queries
 
         public class GetNewsByIdQueryHander : CommandQueryHandlerBase, IRequestHandler<GetNewsByIdQuery, News?>
         {
-            private readonly INewsRepository _newsRepository;
+            private readonly IQueryRepository _queryRepository;
 
-            public GetNewsByIdQueryHander(INewsRepository newsRepository, IMediator mediator, IConnectionMultiplexer db) : base(mediator, db)
+            public GetNewsByIdQueryHander(IQueryRepository queryRepository, IMediator mediator, IConnectionMultiplexer db) : base(mediator, db)
             {
-                _newsRepository = newsRepository;
+                _queryRepository = queryRepository;
             }
 
             public async Task<News?> Handle(GetNewsByIdQuery request, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ namespace ConcorrenciaNews.Services.Queries
                 var result = _db.GetData<News>(request.Id.ToString());
                 if (result == null)
                 {
-                    result = await _newsRepository.GetNewsById(request.Id);
+                    result = await _queryRepository.GetByIdAsync(request.Id);
                 }
 
                 return result;

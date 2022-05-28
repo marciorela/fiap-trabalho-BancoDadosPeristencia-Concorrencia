@@ -1,4 +1,5 @@
 ﻿using ConcorrenciaNews.Domain;
+using ConcorrenciaNews.Domain.Dto;
 using ConcorrenciaNews.Domain.Entities;
 using ConcorrenciaNews.Domain.Model;
 using ConcorrenciaNews.Services.Commands;
@@ -47,16 +48,15 @@ namespace ConcorrenciaNews.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(News news)
+        public async Task<IActionResult> Post(CreateNewsDto news)
         {
-            await _mediator.Send(new CreateNewsCommand()
+            var guidCreated = await _mediator.Send(new CreateNewsCommand()
             {
-                Data = news.Data,
                 Titulo = news.Titulo,
                 Corpo = news.Corpo
             });
 
-            return Created(news.Id.ToString(), news);
+            return Created(guidCreated.ToString(), news);
         }
 
     }

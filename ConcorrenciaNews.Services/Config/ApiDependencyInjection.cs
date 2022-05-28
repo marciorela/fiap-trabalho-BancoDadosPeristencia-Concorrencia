@@ -24,6 +24,7 @@ namespace ConcorrenciaNews.Services.Config
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddDbContext<MainDbContext>();
             services.AddScoped<INewsRepository, NewsRepository>();
+            services.AddScoped<IQueryRepository, QueryRepository>();
 
             return services;
         }

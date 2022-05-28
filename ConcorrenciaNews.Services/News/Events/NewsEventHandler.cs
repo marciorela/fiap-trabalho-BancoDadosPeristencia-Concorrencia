@@ -1,4 +1,7 @@
-﻿using ConcorrenciaNews.Services.Notifications;
+﻿using ConcorrenciaNews.Contracts.Repositories;
+using ConcorrenciaNews.Domain.Enumerators;
+using ConcorrenciaNews.Domain.Query;
+using ConcorrenciaNews.Services.Notifications;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,13 @@ namespace ConcorrenciaNews.Services.Events
 {
     public class NewsEventHandler : INotificationHandler<NewsActionNotification>, INotificationHandler<ErrorNotitification>
     {
+        private readonly IQueryRepository _queryRepository;
+
+        public NewsEventHandler(IQueryRepository queryRepository)
+        {
+            _queryRepository = queryRepository;
+        }
+
         public Task Handle(ErrorNotitification notification, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
@@ -18,12 +28,14 @@ namespace ConcorrenciaNews.Services.Events
             }, cancellationToken);
         }
 
-        public Task Handle(NewsActionNotification notification, CancellationToken cancellationToken)
+        public async Task Handle(NewsActionNotification notification, CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
+            if (notification.Action == ActionNotification.Created && notification.news != null)
             {
-                Console.WriteLine($"{notification.Id} foi cadastrado.");
-            }, cancellationToken);
+                await _queryRepository.AddNewsAsync(notification.news);
+
+                Console.WriteLine($"{notification.news?.Id} foi cadastrado.");
+            }
         }
     }
 }

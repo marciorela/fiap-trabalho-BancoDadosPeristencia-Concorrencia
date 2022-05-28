@@ -16,11 +16,11 @@ namespace ConcorrenciaNews.Services.Queries
 
         public class GetSummaryQueryHander : CommandQueryHandlerBase, IRequestHandler<GetSummaryQuery, IEnumerable<NewsSummary>>
         {
-            private readonly INewsRepository _newsRepository;
+            private readonly IQueryRepository _queryRepository;
 
-            public GetSummaryQueryHander(INewsRepository newsRepository, IMediator mediator, IConnectionMultiplexer db) : base(mediator, db)
+            public GetSummaryQueryHander(IQueryRepository queryRepository, IMediator mediator, IConnectionMultiplexer db) : base(mediator, db)
             {
-                _newsRepository = newsRepository;
+                _queryRepository = queryRepository;
             }
 
             public async Task<IEnumerable<NewsSummary>> Handle(GetSummaryQuery request, CancellationToken cancellationToken)
@@ -28,7 +28,7 @@ namespace ConcorrenciaNews.Services.Queries
                 var list = _db.GetData<IEnumerable<NewsSummary>>("summary");
                 if (list == null)
                 {
-                    list = await _newsRepository.GetSummary();
+                    list = await _queryRepository.GetSummaryAsync();
 
                     if (list.Any())
                     {
