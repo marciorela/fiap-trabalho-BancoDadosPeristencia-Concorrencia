@@ -16,7 +16,7 @@ namespace ConcorrenciaNews.Services.Queries
 
         public Guid Id { get; set; }
 
-        public class GetNewsByIdQueryHander : CommandQueryHandlerBase, IRequestHandler<GetNewsByIdQuery, News>
+        public class GetNewsByIdQueryHander : CommandQueryHandlerBase, IRequestHandler<GetNewsByIdQuery, News?>
         {
             private readonly INewsRepository _newsRepository;
 
@@ -25,7 +25,7 @@ namespace ConcorrenciaNews.Services.Queries
                 _newsRepository = newsRepository;
             }
 
-            public async Task<News> Handle(GetNewsByIdQuery request, CancellationToken cancellationToken)
+            public async Task<News?> Handle(GetNewsByIdQuery request, CancellationToken cancellationToken)
             {
                 var result = _db.GetData<News>(request.Id.ToString());
                 if (result == null)
