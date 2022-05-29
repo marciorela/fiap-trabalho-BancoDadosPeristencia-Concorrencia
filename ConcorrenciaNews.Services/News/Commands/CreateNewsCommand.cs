@@ -15,7 +15,6 @@ namespace ConcorrenciaNews.Services.Commands
     public class CreateNewsCommand : IRequest<Guid>
     {
 
-        public DateTime Data { get; set; } = DateTime.Now;
         public string Titulo { get; set; } = "";
         public string Corpo { get; set; } = "";
 
@@ -32,14 +31,13 @@ namespace ConcorrenciaNews.Services.Commands
             {
                 var news = new News()
                 {
-                    Data = request.Data,
                     Titulo = request.Titulo,
                     Corpo = request.Corpo,
                 };
 
                 await _newsRepository.Add(news);
 
-                await _mediator.Publish(new NewsActionNotification { Id = news.Id, Action = ActionNotification.Created}, cancellationToken);
+                await _mediator.Publish(new NewsActionNotification {news =  news, Action = ActionNotification.Created}, cancellationToken);
 
                 return news.Id;
             }

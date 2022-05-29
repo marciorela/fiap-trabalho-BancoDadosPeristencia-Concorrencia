@@ -15,11 +15,8 @@ namespace ConcorrenciaNews.Data.Repositories
 {
     public class NewsRepository : RepositoryBase, INewsRepository
     {
-        private readonly IDatabase _db;
-
-        public NewsRepository(MainDbContext ctx, IConnectionMultiplexer db) : base(ctx)
+        public NewsRepository(MainDbContext ctx) : base(ctx)
         {
-            _db = db.GetDatabase();
         }
 
         public async Task Add(News news)
@@ -28,19 +25,18 @@ namespace ConcorrenciaNews.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<News?> GetNewsById(Guid id)
-        {
-            return await _ctx.News.FirstOrDefaultAsync(x => x.Id == id);
-        }
+        //public async Task<News?> GetNewsById(Guid id)
+        //{
+        //    return await _ctx.News.FirstOrDefaultAsync(x => x.Id == id);
+        //}
 
-        public async Task<IEnumerable<NewsSummary>> GetSummary()
-        {
-
-            return await _ctx.News
-                .Select(n => new NewsSummary { Id = n.Id, Data = n.Data, Titulo = n.Titulo })
-                .OrderByDescending(o => o.Data)
-                .Take(20)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<NewsSummary>> GetSummary()
+        //{
+        //    return await _ctx.News
+        //        .Select(n => new NewsSummary { Id = n.Id, Data = n.Data, Titulo = n.Titulo })
+        //        .OrderByDescending(o => o.Data)
+        //        .Take(20)
+        //        .ToListAsync();
+        //}
     }
 }

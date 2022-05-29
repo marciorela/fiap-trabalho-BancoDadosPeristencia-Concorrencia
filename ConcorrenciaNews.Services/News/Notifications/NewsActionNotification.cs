@@ -1,4 +1,5 @@
-﻿using ConcorrenciaNews.Domain.Enumerators;
+﻿using ConcorrenciaNews.Domain.Entities;
+using ConcorrenciaNews.Domain.Enumerators;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace ConcorrenciaNews.Services.Notifications
 {
     public class NewsActionNotification : INotification
     {
-        public Guid Id { get; set; }
+        public News? news { get; set; }
         public ActionNotification Action { get; set; }
     }
 }
