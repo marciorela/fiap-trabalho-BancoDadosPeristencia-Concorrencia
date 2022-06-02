@@ -31,6 +31,11 @@ namespace ConcorrenciaNews.Services.Queries
                 if (result == null)
                 {
                     result = await _queryRepository.GetByIdAsync(request.Id);
+
+                    if (result != null)
+                    {
+                        _db.SetData(request.Id.ToString(), result, TimeSpan.FromSeconds(60));
+                    }
                 }
 
                 return result;
